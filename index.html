@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/start.css">
 </head>
-<body>
+<body class="start-page">
   <header class="tv-topbar">
     <div class="tv-topbar__title" id="page-title">Today</div>
     <div class="tv-topbar__meta" id="page-meta"></div>
@@ -24,9 +24,10 @@
       <button type="button" data-filter="pm"  aria-pressed="false">PM</button>
       <button type="button" data-filter="all" aria-pressed="true">All today</button>
     </div>
+    <div class="start-toolbar__overflow tv-hidden" id="overflow-note"></div>
   </div>
 
-  <main class="tv-main">
+  <main class="start-main">
     <div class="tv-loading tv-hidden" id="loading">Loading today's bookings…</div>
     <div class="tv-empty tv-hidden" id="empty-state">
       <div class="tv-empty__title">No grooms today</div>

@@ -1,52 +1,84 @@
-/* Breed working screen — image/text split. */
+/* Breed working screen — single-screen, D-pad-driven, no scroll, fills the
+ * full Hisense 40" 1920×1080 viewport.
+ *
+ * Hard constraints:
+ *   - The whole screen NEVER scrolls (vertical or horizontal).
+ *   - Image pane and text pane each fit their content within the viewport.
+ *   - Only one section's text shown at a time, switched via section pager.
+ *   - Vision-finding sections are admin-review material; hidden on TV.
+ *
+ * Layout (1920×1080 baseline):
+ *   ┌──────────────────────────── 88 px topbar ────────────────────────────┐
+ *   │ ← Breed name           [Pet Groom][Show]      Search   Refresh       │
+ *   ├──────────────────────────── 112 px section pager ────────────────────┤
+ *   │  [Body] [Throat] [Tail] [Legs] [Head]                                │
+ *   ├──────────────────────────── ~700-790 px stage ───────────────────────┤
+ *   │  ┌─────────────── 55% image ───────┐  ┌──────── 45% text ────────┐    │
+ *   │  │                                 │  │ BODY                     │    │
+ *   │  │       Main hero image           │  │ #10 #7F #5F #15 #40      │    │
+ *   │  │       (object-fit: contain)     │  │                          │    │
+ *   │  │                                 │  │ section body copy…       │    │
+ *   │  ├─────── thumb row 180 px ────────┤  │                          │    │
+ *   │  │ FRT  BCK  HEAD  SUP  SUP  SUP   │  │                          │    │
+ *   │  └─────────────────────────────────┘  └──────────────────────────┘    │
+ *   ├──────────────────────────── 88 px warning strip (optional) ──────────┤
+ *   │ IMPORTANT [Body] Many pet owners choose to clipper-cut…              │
+ *   └──────────────────────────────────────────────────────────────────────┘
+ */
+
+html, body { height: 100%; }
+body.breed-page { overflow: hidden; }   /* the whole screen never scrolls */
 
 .breed-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 88px 112px 1fr auto;
+  grid-template-areas:
+    "topbar"
+    "pager"
+    "main"
+    "warn";
+  background: var(--color-bg);
 }
 
-/* Top bar (overrides shared .tv-topbar to add groom-type segmented toggle) */
+/* ── Topbar ─────────────────────────────────────────────────────── */
 .breed-topbar {
+  grid-area: topbar;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) var(--gutter);
+  padding: 0 var(--gutter);
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 .breed-topbar__back {
-  /* Square icon-shaped button to leave the working screen */
+  font-size: 36px;
+  font-weight: 800;
 }
 .breed-topbar__title {
   flex: 1 1 auto;
-  font-size: var(--font-size-3xl);
+  font-size: 48px;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: var(--line-height-tight);
-}
-.breed-topbar__meta {
-  font-size: var(--font-size-sm);
-  color: var(--color-secondary);
-  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .groom-toggle {
   display: inline-flex;
-  border: 1px solid var(--color-border-strong);
+  border: 2px solid var(--color-border-strong);
   border-radius: 999px;
   background: var(--color-surface-2);
   overflow: hidden;
 }
 .groom-toggle button {
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+  padding: 0 var(--space-3);
+  min-height: 60px;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--color-ink-2);
-  min-height: 72px;
   border-radius: 0;
 }
 .groom-toggle button[aria-pressed="true"] {
@@ -54,170 +86,219 @@
   color: #fff;
 }
 
-/* Two-pane content */
+/* ── Section pager ─────────────────────────────────────────────── */
+.section-pager {
+  grid-area: pager;
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--gutter);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.section-chip {
+  flex: 1 1 0;
+  min-height: 96px;
+  padding: 0 var(--space-3);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--color-ink-2);
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: transform .12s ease, background .12s ease;
+}
+.section-chip:hover { background: var(--color-brand-soft); }
+.section-chip[aria-selected="true"] {
+  background: var(--color-brand);
+  color: #fff;
+  border-color: var(--color-brand-dark);
+}
+.section-chip:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-brand);
+  outline-offset: 4px;
+}
+
+/* ── Stage ─────────────────────────────────────────────────────── */
+.breed-main {
+  grid-area: main;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
 .breed-stage {
   display: grid;
-  /* image_panel_width / text_panel_width default 70/30 — driven from JS */
-  grid-template-columns: 70fr 30fr;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--gutter);
-  flex: 1 1 auto;
-  align-items: start;
+  grid-template-columns: 55fr 45fr;       /* JS clamps display ratio into [40,60] */
+  gap: var(--space-3);
+  padding: var(--space-3) var(--gutter);
+  height: 100%;
+  align-items: stretch;
+  overflow: hidden;
 }
 
 /* Image pane */
-.image-pane { display: flex; flex-direction: column; gap: var(--space-3); }
+.image-pane {
+  display: grid;
+  grid-template-rows: 1fr 180px;
+  gap: var(--space-2);
+  min-height: 0;
+  min-width: 0;
+}
 .image-main {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-2);
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 0;
+  min-width: 0;
   overflow: hidden;
 }
 .image-main img {
-  width: 100%;
-  max-height: 720px;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: var(--radius-md);
+  display: block;
 }
-
-.image-roles {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.image-role-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-.image-role-group__label {
-  font-size: var(--font-size-base);
-  font-weight: 700;
-  color: var(--color-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.image-role-group__row {
+.image-thumb-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: var(--space-2);
+  height: 180px;
+  min-height: 0;
 }
-.image-role-group__row img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  background: var(--color-surface-2);
+.image-thumb {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+}
+.image-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+.image-thumb__role {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(28,28,30,.85);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 8px;
 }
 
 /* Text pane */
 .text-pane {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  position: sticky;
-  top: 144px;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
-}
-
-.blade-box {
-  display: flex;
-  flex-direction: column;
+  padding: var(--space-3) var(--space-4);
+  display: grid;
+  grid-template-rows: auto auto 1fr;
   gap: var(--space-2);
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
-.blade-box__title {
-  font-size: var(--font-size-base);
-  font-weight: 700;
-  color: var(--color-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.text-pane__name {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: var(--line-height-tight);
+  color: var(--color-ink);
 }
-.blade-row {
+.text-pane__blades {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 .blade-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 96px;
-  padding: 12px var(--space-3);
+  padding: 8px var(--space-3);
   font-family: var(--font-mono);
-  font-size: var(--font-size-blade);
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 800;
   color: var(--color-brand-deep);
   background: var(--color-brand-soft);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 2px solid rgba(0,175,241,.30);
 }
-
-.warning-box {
-  background: var(--bg-warning);
-  color: var(--fg-warning);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-relaxed);
-  white-space: pre-wrap;
-}
-.warning-box__title {
-  font-weight: 700;
-  margin-bottom: var(--space-1);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: var(--font-size-sm);
-}
-
-.section-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
-}
-.section:last-child { border-bottom: none; padding-bottom: 0; }
-.section__name {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-  color: var(--color-ink);
-}
-.section__text {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-relaxed);
+.text-pane__body {
+  /* Auto-fits the section text. clamp() keeps it readable from 1-2 m
+   * (min 20 px) and lets it grow into the pane on bigger viewports.
+   * On 1920 px the upper bound is 26 px so the longest section (Body
+   * for Mini Schnauzer ≈ 190 words) fits in the available pane height
+   * without overflow. */
+  font-size: clamp(20px, 1.4vw, 26px);
+  line-height: 1.4;
   color: var(--color-ink-2);
   white-space: pre-wrap;
+  /* Soft fade at the bottom in case a section is genuinely too long
+   * for the pane — visual cue rather than scroll. */
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
 }
-.section__blades {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  margin-top: var(--space-1);
-}
-.section__blades .blade-pill {
-  min-width: 64px;
-  padding: 6px 12px;
-  font-size: var(--font-size-base);
+.text-pane__body::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 28px;
+  background: linear-gradient(to bottom, transparent, var(--color-surface));
+  pointer-events: none;
 }
 
-/* Vision-findings sections render line-broken; keep them readable but
-   distinguish them as auto-extracted material with a softer style */
-.section--vision .section__text {
-  font-size: var(--font-size-base);
-  color: var(--color-secondary);
+/* ── Warning strip ─────────────────────────────────────────────── */
+.warning-strip {
+  grid-area: warn;
+  background: var(--bg-warning);
+  color: var(--fg-warning);
+  padding: var(--space-2) var(--gutter);
+  font-size: 24px;
+  line-height: 1.35;
+  border-top: 1px solid rgba(0,0,0,.06);
+  /* Two-line cap — never grows unbounded. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 88px;
+  align-items: center;
+}
+.warning-strip__title {
+  font-weight: 800;
+  margin-right: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 18px;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255,149,0,.20);
 }

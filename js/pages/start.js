@@ -4,6 +4,8 @@ import { fetchToday } from "../api.js";
 import { wireDpadNav, focusFirst } from "../nav.js";
 import { openSearch } from "../search.js";
 
+const VISIBLE_CAP = 9;   /* 3×3 grid; extras live behind Search. */
+
 const els = {
   pageTitle:    () => document.getElementById("page-title"),
   meta:         () => document.getElementById("page-meta"),
@@ -13,6 +15,7 @@ const els = {
   grid:         () => document.getElementById("breed-grid"),
   empty:        () => document.getElementById("empty-state"),
   loading:      () => document.getElementById("loading"),
+  overflow:     () => document.getElementById("overflow-note"),
 };
 
 let state = {
@@ -67,6 +70,7 @@ function render() {
 
   if (!bookings.length) {
     els.empty().classList.remove("tv-hidden");
+    els.overflow().classList.add("tv-hidden");
     const t = pack.bookings?.length
       ? `No ${state.filter.toUpperCase()} grooms today`
       : "No grooms today";
@@ -78,7 +82,19 @@ function render() {
   }
   els.empty().classList.add("tv-hidden");
 
-  for (const booking of bookings) els.grid().appendChild(renderCard(booking));
+  /* Cap to VISIBLE_CAP; overflow surfaces via Search. */
+  const visible = bookings.slice(0, VISIBLE_CAP);
+  const hidden  = bookings.length - visible.length;
+  for (const booking of visible) els.grid().appendChild(renderCard(booking));
+
+  const overflowEl = els.overflow();
+  if (hidden > 0) {
+    overflowEl.classList.remove("tv-hidden");
+    overflowEl.textContent = `+${hidden} more — use Search`;
+  } else {
+    overflowEl.classList.add("tv-hidden");
+  }
+
   focusFirst();
 }
 

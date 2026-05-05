@@ -15,12 +15,13 @@
     <button class="tv-btn tv-btn--icon breed-topbar__back" id="back-btn" type="button" aria-label="Back to today's bookings">←</button>
     <div class="breed-topbar__title" id="breed-title">Loading…</div>
     <div class="groom-toggle tv-hidden" id="groom-toggle" role="group" aria-label="Groom type"></div>
-    <div class="breed-topbar__meta" id="breed-meta"></div>
     <button class="tv-btn" id="search-btn" type="button">Search</button>
     <button class="tv-btn tv-btn--ghost" id="refresh-btn" type="button">Refresh</button>
   </header>
 
-  <main class="tv-main">
+  <nav class="section-pager tv-hidden" id="section-pager" role="tablist" aria-label="Section"></nav>
+
+  <main class="breed-main">
     <div class="tv-loading tv-hidden" id="loading">Loading breed pack…</div>
     <div class="tv-empty tv-hidden" id="empty-state">
       <div class="tv-empty__title">Not found</div>
@@ -30,6 +31,7 @@
       <section class="image-pane" id="image-pane" aria-label="Breed images"></section>
       <aside class="text-pane" id="text-pane" aria-label="Grooming notes"></aside>
     </div>
+    <footer class="warning-strip tv-hidden" id="warning-strip" aria-label="Important notes"></footer>
   </main>
 
   <script type="module" src="js/pages/breed.js"></script>
