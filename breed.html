@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fairy Tails — Breed reference</title>
+  <meta name="viewport" content="width=1920, initial-scale=1">
+  <meta name="theme-color" content="#00AFF1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%2300AFF1'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/breed.css">
+</head>
+<body class="breed-page">
+  <header class="breed-topbar">
+    <button class="tv-btn tv-btn--icon breed-topbar__back" id="back-btn" type="button" aria-label="Back to today's bookings">←</button>
+    <div class="breed-topbar__title" id="breed-title">Loading…</div>
+    <div class="groom-toggle tv-hidden" id="groom-toggle" role="group" aria-label="Groom type"></div>
+    <div class="breed-topbar__meta" id="breed-meta"></div>
+    <button class="tv-btn" id="search-btn" type="button">Search</button>
+    <button class="tv-btn tv-btn--ghost" id="refresh-btn" type="button">Refresh</button>
+  </header>
+
+  <main class="tv-main">
+    <div class="tv-loading tv-hidden" id="loading">Loading breed pack…</div>
+    <div class="tv-empty tv-hidden" id="empty-state">
+      <div class="tv-empty__title">Not found</div>
+      <div class="tv-empty__body"></div>
+    </div>
+    <div class="breed-stage tv-hidden" id="breed-stage">
+      <section class="image-pane" id="image-pane" aria-label="Breed images"></section>
+      <aside class="text-pane" id="text-pane" aria-label="Grooming notes"></aside>
+    </div>
+  </main>
+
+  <script type="module" src="js/pages/breed.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+/* Start screen — today's bookings as breed buttons. */
+
+.start-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--gutter);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+.start-toolbar__filter {
+  display: inline-flex;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+.start-toolbar__filter button {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-ink-2);
+  border-radius: 0;
+  background: transparent;
+  min-height: 72px;
+}
+.start-toolbar__filter button[aria-pressed="true"] {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+/* Breed grid */
+.breed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+}
+
+.breed-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: left;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  min-height: 180px;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.breed-card:hover {
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-md);
+}
+.breed-card:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-brand);
+  outline-offset: 4px;
+  border-color: var(--color-brand);
+}
+.breed-card[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.breed-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.breed-card__name {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  line-height: var(--line-height-tight);
+}
+.breed-card__time {
+  font-size: var(--font-size-lg);
+  color: var(--color-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.breed-card__raw {
+  font-size: var(--font-size-base);
+  color: var(--color-tertiary);
+  font-style: italic;
+}
+.breed-card__status { align-self: flex-start; }
+
+/* Suggestions sheet for unmatched bookings */
+.tv-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.tv-suggestions__title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+.tv-suggestions__row {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-brand-soft);
+  color: var(--color-brand-deep);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  min-height: 64px;
+}

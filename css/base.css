@@ -1,0 +1,211 @@
+/* Base reset + page chrome.
+ * Designed for 1920×1080 Vidaa browser. Avoids :has(), subgrid, container
+ * queries — vanilla flexbox + grid only.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 16px; /* anchor for rem if used; we mostly use px directly */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Viewport sanity for 1080p TV */
+img { display: block; max-width: 100%; height: auto; }
+
+/* Focus styles — visible at TV viewing distance */
+:focus { outline: none; }
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-brand);
+  outline-offset: 4px;
+  box-shadow: var(--shadow-md);
+}
+
+/* All interactive elements get the same focus treatment by default */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-brand);
+  outline-offset: 4px;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+a { color: var(--color-brand-dark); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3, h4 { margin: 0; line-height: var(--line-height-tight); font-weight: 700; }
+p  { margin: 0; }
+ul, ol { margin: 0; padding-left: var(--space-3); }
+
+/* Topbar (shared between start and breed pages) */
+.tv-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--gutter);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tv-topbar__title {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  flex: 1 1 auto;
+}
+.tv-topbar__meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Buttons */
+.tv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--hit-min-height);
+  min-width: var(--hit-min-width);
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border-strong);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.tv-btn:hover { background: var(--color-surface-2); }
+.tv-btn:active { transform: translateY(1px); }
+.tv-btn--primary {
+  background: var(--color-brand);
+  color: #fff;
+  border-color: var(--color-brand-dark);
+}
+.tv-btn--primary:hover { background: var(--color-brand-dark); }
+
+.tv-btn--ghost { background: transparent; }
+
+.tv-btn--icon {
+  width: var(--hit-min-width);
+  padding: 0;
+}
+
+/* Pills (for status, blade chips, role labels) */
+.tv-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: 999px;
+  background: var(--bg-neutral);
+  color: var(--fg-neutral);
+}
+.tv-pill--success { background: var(--bg-success); color: var(--fg-success); }
+.tv-pill--info    { background: var(--bg-info);    color: var(--fg-info); }
+.tv-pill--warning { background: var(--bg-warning); color: var(--fg-warning); }
+.tv-pill--brand   { background: var(--color-brand-soft); color: var(--color-brand-deep); }
+
+/* Page main area */
+.tv-main {
+  padding: var(--space-4) var(--gutter);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+/* Empty / loading states */
+.tv-empty {
+  text-align: center;
+  padding: var(--space-7) var(--gutter);
+  color: var(--color-secondary);
+}
+.tv-empty__title { font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-ink); margin-bottom: var(--space-2); }
+.tv-empty__body  { font-size: var(--font-size-lg); }
+
+.tv-loading { padding: var(--space-5); text-align: center; color: var(--color-secondary); font-size: var(--font-size-lg); }
+
+/* Modal (search) */
+.tv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 120px;
+  z-index: 100;
+}
+.tv-modal {
+  width: 1200px;
+  max-width: calc(100vw - var(--gutter) * 2);
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.tv-modal__title { font-size: var(--font-size-2xl); font-weight: 800; }
+.tv-modal__input {
+  width: 100%;
+  font-size: var(--font-size-xl);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  background: var(--color-surface-2);
+}
+.tv-modal__input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-brand);
+  outline-offset: 0;
+  border-color: var(--color-brand);
+}
+.tv-modal__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 600px;
+  overflow-y: auto;
+}
+.tv-modal__row {
+  text-align: left;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-lg);
+  background: var(--color-surface-2);
+}
+.tv-modal__row:hover { background: var(--color-brand-soft); }
+.tv-modal__row[aria-selected="true"] { background: var(--color-brand-soft); }
+.tv-modal__row__sub { display: block; font-size: var(--font-size-sm); color: var(--color-secondary); margin-top: 4px; }
+
+.tv-modal__close { align-self: flex-end; }
+
+/* Hidden but kept in DOM (for screen readers + JS state) */
+.tv-hidden { display: none !important; }

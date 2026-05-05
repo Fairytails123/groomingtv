@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fairy Tails — Today's grooms</title>
+  <meta name="viewport" content="width=1920, initial-scale=1">
+  <meta name="theme-color" content="#00AFF1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%2300AFF1'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/start.css">
+</head>
+<body>
+  <header class="tv-topbar">
+    <div class="tv-topbar__title" id="page-title">Today</div>
+    <div class="tv-topbar__meta" id="page-meta"></div>
+    <button class="tv-btn" id="search-btn" type="button">Search</button>
+    <button class="tv-btn tv-btn--ghost" id="refresh-btn" type="button">Refresh</button>
+  </header>
+
+  <div class="start-toolbar">
+    <div class="start-toolbar__filter" id="session-filter" role="group" aria-label="Filter by session">
+      <button type="button" data-filter="am"  aria-pressed="false">AM</button>
+      <button type="button" data-filter="pm"  aria-pressed="false">PM</button>
+      <button type="button" data-filter="all" aria-pressed="true">All today</button>
+    </div>
+  </div>
+
+  <main class="tv-main">
+    <div class="tv-loading tv-hidden" id="loading">Loading today's bookings…</div>
+    <div class="tv-empty tv-hidden" id="empty-state">
+      <div class="tv-empty__title">No grooms today</div>
+      <div class="tv-empty__body">Open Search to look up any breed in the knowledge base.</div>
+    </div>
+    <div class="breed-grid" id="breed-grid" role="list" aria-label="Breeds booked today"></div>
+  </main>
+
+  <script type="module" src="js/pages/start.js"></script>
+</body>
+</html>

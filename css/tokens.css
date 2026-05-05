@@ -1,0 +1,100 @@
+/* Fairy Tails TV display — Design tokens
+ *
+ * Mirrors the admin's sky-blue palette + Plus Jakarta Sans, but every
+ * size is scaled for the salon's Hisense 40" 40E4QTUK (1920×1080 FHD,
+ * Vidaa browser). Viewing distance ranges from up-close (groomer reading
+ * the working screen) to across-the-salon (glancing at the start-screen
+ * breed buttons), so type and hit targets are biased toward the larger
+ * end of the TV-app convention.
+ */
+:root {
+  /* Brand */
+  --color-brand:        #00AFF1;
+  --color-brand-dark:   #0090C8;
+  --color-brand-deep:   #006A94;
+  --color-brand-soft:   #E6F7FE;
+
+  /* Ink */
+  --color-ink:          #1C1C1E;
+  --color-ink-2:        #3A3A3C;
+  --color-secondary:    #6E6E73;
+  --color-tertiary:     #9A9AA0;
+
+  /* Surfaces */
+  --color-bg:           #F2F2F7;
+  --color-surface:      #FFFFFF;
+  --color-surface-2:    #F8F9FB;
+
+  /* Lines */
+  --color-border:       rgba(60,60,67,.14);
+  --color-border-strong:rgba(60,60,67,.24);
+
+  /* Status */
+  --color-success:      #34C759;
+  --color-warning:      #FF9500;
+  --color-error:        #FF3B30;
+
+  /* Status surfaces */
+  --bg-success:         #E0F7E6;
+  --fg-success:         #14692C;
+  --bg-warning:         #FFF1E0;
+  --fg-warning:         #8A3D0C;
+  --bg-info:            #E6F7FE;
+  --fg-info:            #006A94;
+  --bg-neutral:         #F1F4F7;
+  --fg-neutral:         #4F5F6E;
+
+  /* Type — TV scale.
+   * Body: 28 px (legible at 1-2 m).
+   * Headings/buttons: 36-64 px (readable from 3-4 m).
+   * Hero numerals: 80 px for blade-number chips.
+   */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+               "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Roboto Mono",
+               Menlo, Consolas, monospace;
+  --font-size-sm:    20px;  /* secondary metadata */
+  --font-size-base:  28px;  /* body text */
+  --font-size-md:    32px;  /* section body emphasis */
+  --font-size-lg:    40px;  /* section names, breed list rows */
+  --font-size-xl:    48px;  /* card titles, breed buttons */
+  --font-size-2xl:   56px;  /* page title, breed working header */
+  --font-size-3xl:   64px;  /* breed name on working screen */
+  --font-size-blade: 38px;  /* blade-number pill inner text */
+
+  --line-height-tight:  1.18;
+  --line-height-normal: 1.45;
+  --line-height-relaxed:1.55;
+
+  /* Spacing — 8 px grid (TV-friendly). */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 96px;
+
+  /* Radii */
+  --radius-sm:  10px;
+  --radius-md:  16px;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+  --shadow-lg: 0 12px 36px rgba(0,0,0,.16);
+
+  /* Focus — high-contrast, thicker for TV viewing distance. */
+  --focus-ring-width: 6px;
+  --focus-ring: 0 0 0 var(--focus-ring-width) rgba(0,175,241,.95);
+
+  /* Hit targets */
+  --hit-min-height: 96px;
+  --hit-min-width:  96px;
+
+  /* Layout — assume 1920×1080 baseline; never narrower than 1280. */
+  --content-max-width: 1840px;
+  --gutter:            40px;
+}
