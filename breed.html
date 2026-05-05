@@ -6,33 +6,68 @@
   <meta name="viewport" content="width=1920, initial-scale=1">
   <meta name="theme-color" content="#00AFF1">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%2300AFF1'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/breed.css">
 </head>
 <body class="breed-page">
-  <header class="breed-topbar">
-    <button class="tv-btn tv-btn--icon breed-topbar__back" id="back-btn" type="button" aria-label="Back to today's bookings">←</button>
-    <div class="breed-topbar__title" id="breed-title">Loading…</div>
-    <div class="groom-toggle tv-hidden" id="groom-toggle" role="group" aria-label="Groom type"></div>
-    <button class="tv-btn" id="search-btn" type="button">Search</button>
-    <button class="tv-btn tv-btn--ghost" id="refresh-btn" type="button">Refresh</button>
-  </header>
+  <div class="page" id="page">
 
-  <nav class="section-pager tv-hidden" id="section-pager" role="tablist" aria-label="Section"></nav>
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="icon-btn" id="back-btn" type="button" aria-label="Back to today's bookings">←</button>
+      <div class="brand-mark" aria-hidden="true">
+        <span class="brand-dot"></span>
+        <span class="brand-name">Fairy Tails</span>
+      </div>
+      <div class="title-block">
+        <h1 class="title" id="breed-title">Loading…</h1>
+        <span class="title-meta" id="title-meta"></span>
+      </div>
+      <div class="segmented hidden" id="groom-toggle" role="group" aria-label="Groom type"></div>
+      <button class="pill-btn pill-btn--ghost" id="search-btn" type="button">Search</button>
+      <button class="pill-btn" id="refresh-btn" type="button">Refresh</button>
+    </header>
 
-  <main class="breed-main">
-    <div class="tv-loading tv-hidden" id="loading">Loading breed pack…</div>
-    <div class="tv-empty tv-hidden" id="empty-state">
-      <div class="tv-empty__title">Not found</div>
-      <div class="tv-empty__body"></div>
-    </div>
-    <div class="breed-stage tv-hidden" id="breed-stage">
-      <section class="image-pane" id="image-pane" aria-label="Breed images"></section>
-      <aside class="text-pane" id="text-pane" aria-label="Grooming notes"></aside>
-    </div>
-    <footer class="warning-strip tv-hidden" id="warning-strip" aria-label="Important notes"></footer>
-  </main>
+    <!-- Section pager -->
+    <nav class="pager" id="pager" role="tablist" aria-label="Section"></nav>
+
+    <!-- Stage -->
+    <main class="stage">
+      <div class="tv-loading hidden" id="loading">Loading breed pack…</div>
+      <div class="tv-empty hidden" id="empty-state">
+        <div class="tv-empty__title"></div>
+        <div class="tv-empty__body"></div>
+      </div>
+
+      <div class="imgcol" id="imgcol">
+        <div class="main-img" id="main-img">
+          <div class="main-img__chip" id="main-img-chip">
+            <span class="dot"></span>
+            <span id="main-img-chip-label">Main</span>
+          </div>
+          <div class="main-img__inner" id="main-img-inner"></div>
+        </div>
+        <div class="strip" id="strip" role="listbox" aria-label="Image set"></div>
+      </div>
+
+      <aside class="textpane" id="textpane">
+        <div class="textpane__eyebrow"><span class="dot"></span><span id="text-eyebrow">Section</span></div>
+        <div class="textpane__name" id="text-name"></div>
+        <div class="blades" id="blades"></div>
+        <div class="textpane__body" id="text-body"></div>
+      </aside>
+    </main>
+
+    <!-- Warning strip -->
+    <footer class="warn hidden" id="warn">
+      <span class="warn__tag"><span class="dot"></span>Important</span>
+      <span class="warn__body" id="warn-body"></span>
+    </footer>
+  </div>
 
   <script type="module" src="js/pages/breed.js"></script>
 </body>
